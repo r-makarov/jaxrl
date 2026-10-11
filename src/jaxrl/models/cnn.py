@@ -1,11 +1,11 @@
 from flax import nnx
-import jax.numpy as jnp
+import jax
 
 
 class CNN(nnx.Module):
     """Convolutional neural network (CNN) model for image classification."""
 
-    def __init__(self, n_in, n_out, rngs):
+    def __init__(self, n_in, n_out, *, rngs):
         self.conv1 = nnx.Conv(
             in_features=n_in,
             out_features=16,
@@ -34,7 +34,7 @@ class CNN(nnx.Module):
         )
 
 
-    def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
+    def __call__(self, x: jax.Array) -> jax.Array:
         # Convolutional block 1:
         x = self.conv1(x)
         x = nnx.relu(x)
@@ -52,8 +52,7 @@ class CNN(nnx.Module):
         return x
 
 
-    def predict(self, x: jnp.ndarray) -> jnp.ndarray:
-        logits = self.__call__(x)
-        probs = nnx.softmax(logits)
-        predictions = jnp.argmax(probs, axis=-1)
-        return predictions
+    # def predict(self, x: jax.Array) -> jax.Array:
+    #     logits = self.__call__(x)
+    #     predictions = jnp.argmax(logits, axis=1)
+    #     return predictions
